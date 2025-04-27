@@ -45,6 +45,8 @@ describe('success cases', function (): void {
         'by id'=> ['?id=1', 1],
         'by firstName'=> ['?firstName=John', 1],
         'by lastName'=> ['?lastName=Doe', 2],
+        'by lastName and firstName'=> ['?firstName=John&lastName=Doe', 1],
+        'by lastName and firstName not found'=> ['?firstName=John&lastName=Bulton', 0],
         'by email'=> ['?email=harry.colton@domain.com', 1],
         'by status'=> ['?status='.UserStatus::ACTIVATED->value, 3],
         'by unknown firstName'=> ['?firstName=Jim', 0],
