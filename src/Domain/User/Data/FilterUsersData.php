@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Src\Domain\User\Data;
 
+use Src\Domain\Core\Data\PaginatedAttributeData;
 use Src\Domain\User\Enum\UserStatus;
 
 final readonly class FilterUsersData
@@ -14,6 +15,7 @@ final readonly class FilterUsersData
         public ?string $lastName = null,
         public ?string $email = null,
         public ?UserStatus $status = null,
+        public ?PaginatedAttributeData $pagination = null,
     )
     {
 

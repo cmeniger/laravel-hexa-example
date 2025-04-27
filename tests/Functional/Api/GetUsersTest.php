@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Functional\Api;
 
+use Src\Domain\Core\Data\PaginatedAttributeData;
 use Src\Domain\User\Enum\UserStatus;
 use Src\Infrastructure\Models\UserModel;
 
@@ -51,5 +52,44 @@ describe('success cases', function (): void {
         'by status'=> ['?status='.UserStatus::ACTIVATED->value, 3],
         'by unknown firstName'=> ['?firstName=Jim', 0],
         'by unknown filter'=> ['?test=Jim', 5],
+    ]);
+
+    it('paginated', function (string $attributes, int $page, int $perPage, int $count, int $total, int $lastPage, ?string $linkPrev, ?string $linkNext): void {
+        UserModel::factory()
+            ->count(100)
+            ->create();
+      
+        $response = $this->getJson(sprintf('/api/users%s', $attributes));
+               
+        $response->assertStatus(200);
+        
+        // items
+        $this->assertCount($count, $response->json('items'));
+        // meta
+        $this->assertEquals($page, $response->json('meta.current_page'));
+        $this->assertEquals($perPage, $response->json('meta.per_page'));
+        $this->assertEquals($total, $response->json('meta.total'));
+        $this->assertEquals($lastPage, $response->json('meta.last_page'));
+        // links
+        $this->assertStringContainsString ('?page=1', $response->json('links.first'));
+        $this->assertStringContainsString (sprintf('?page=%d', $lastPage), $response->json('links.last'));
+        if ($linkPrev) {
+            $this->assertStringContainsString ($linkPrev, $response->json('links.prev'));
+        } else {
+            $this->assertNull($response->json('links.prev'));
+        }
+        if ($linkNext) {
+            $this->assertStringContainsString ($linkNext, $response->json('links.next'));
+        } else {
+            $this->assertNull($response->json('links.next'));
+        }
+    })->with([
+        'default values'=> ['', PaginatedAttributeData::DEFAULT_PAGE, PaginatedAttributeData::DEFAULT_PER_PAGE, PaginatedAttributeData::DEFAULT_PER_PAGE, 100, 100 / PaginatedAttributeData::DEFAULT_PER_PAGE, null, '?page=2'],
+        'default page'=> ['?perPage=20', PaginatedAttributeData::DEFAULT_PAGE, 20, 20, 100, 5, null, '?page=2'],
+        'default perPage'=> ['?page=3', 3, PaginatedAttributeData::DEFAULT_PER_PAGE, PaginatedAttributeData::DEFAULT_PER_PAGE, 100, 100 / PaginatedAttributeData::DEFAULT_PER_PAGE, '?page=2', '?page=4'],
+        'page 1 / perPage 10'=> ['?page=1&perPage=10', 1, 10, 10, 100, 10, null, '?page=2'],
+        'page 10 / perPage 10'=> ['?page=10&perPage=10', 10, 10, 10, 100, 10, '?page=9', null],
+        'page 5 / perPage 10'=> ['?page=5&perPage=10', 5, 10, 10, 100, 10, '?page=4', '?page=6'],
+        'page 1 / perPage 100'=> ['?page=1&perPage=100', 1, 100, 100, 100, 1, null, null],
     ]);
 });
