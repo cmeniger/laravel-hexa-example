@@ -7,11 +7,12 @@ namespace Src\Application\Controller\User\Resource;
 use Src\Domain\User\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 
-final class UserResource extends JsonResource
+final class UserCollectionResource extends JsonResource
 {
     /**
-     * @var User
+     * @var Collection<User>
      */
     public $resource;
 
@@ -21,11 +22,7 @@ final class UserResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->resource->getId(),
-            'firstName' => $this->resource->getFirstName(),
-            'lastName' => $this->resource->getLastName(),
-            'email' => $this->resource->getEmail(),
-            'status' => $this->resource->getStatus()->value,
+            'items' => UserResource::collection($this->resource),
         ];
     }
 }
