@@ -16,6 +16,10 @@ describe('success cases', function (): void {
             ->assertStatus(200)    
             ->assertJson([
                 'id' => $model->id,
+                'firstName' => $model->first_name,
+                'lastName' => $model->last_name,
+                'email' => $model->email,
+                'status' => $model->status->value,
             ]);
     });
 });
