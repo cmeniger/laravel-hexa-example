@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Src\Domain\Core\Data;
 
-use Illuminate\Http\Request;
-
 final readonly class PaginatedAttributeData
 {
     public const DEFAULT_PAGE = 1;
@@ -19,11 +17,14 @@ final readonly class PaginatedAttributeData
        
     }
 
-    public static function buildFromRequest(Request $request): self
+    /**
+     * @param array<string, string> $data
+     */
+    public static function buildFromArray(array $data): self
     {
         return new self(
-            page: (int) $request->query("page",(string) self::DEFAULT_PAGE),
-            perPage: (int) $request->query("perPage",(string) self::DEFAULT_PER_PAGE),
+            page: isset($data["page"]) ? (int) $data["page"] : self::DEFAULT_PAGE,  
+            perPage: isset($data["perPage"]) ? (int) $data["perPage"] : self::DEFAULT_PER_PAGE,
         );
     }
 }

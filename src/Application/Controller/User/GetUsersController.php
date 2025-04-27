@@ -20,7 +20,7 @@ final class GetUsersController extends Controller
 
     public function __invoke(Request $request): PaginatedResource
     {     
-        $paginatedData = ($this->action)(data: FilterUsersData::buildFromRequest(request: $request));
+        $paginatedData = ($this->action)(data: FilterUsersData::buildFromArray(data: $request->query->all()));
         
         return new PaginatedResource(
             resource: $paginatedData, 

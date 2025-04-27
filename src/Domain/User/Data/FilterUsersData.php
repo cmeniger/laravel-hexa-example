@@ -6,7 +6,6 @@ namespace Src\Domain\User\Data;
 
 use Src\Domain\Core\Data\PaginatedAttributeData;
 use Src\Domain\User\Enum\UserStatus;
-use Illuminate\Http\Request;
 
 final readonly class FilterUsersData
 {
@@ -22,15 +21,18 @@ final readonly class FilterUsersData
 
     }
 
-    public static function buildFromRequest(Request $request): self
+    /**
+     * @param array<string, string> $data
+     */
+    public static function buildFromArray(array $data): self
     {
         return new self(
-            id: (int) $request->query('id'),
-            firstName: $request->query('firstName'),
-            lastName: $request->query('lastName'),
-            email: $request->query('email'),
-            status: UserStatus::tryFrom((string) $request->query('status')),
-            pagination: PaginatedAttributeData::buildFromRequest(request: $request),
+            id: isset($data["id"]) ? (int) $data["id"] : null,
+            firstName: $data["firstName"] ?? null,
+            lastName: $data["lastName"] ?? null,
+            email: $data["email"] ?? null,
+            status: UserStatus::tryFrom($data["status"] ?? ''),
+            pagination: PaginatedAttributeData::buildFromArray(data: $data),
         );
     }
 }
