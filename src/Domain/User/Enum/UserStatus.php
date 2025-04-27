@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\User\Enum;
+namespace Src\Domain\User\Enum;
 
 enum UserStatus: string
 {

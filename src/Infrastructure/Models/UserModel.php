@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Models;
+namespace Src\Infrastructure\Models;
 
-use App\Domain\User\Enum\UserStatus;
+use Src\Domain\User\Enum\UserStatus;
 use Carbon\CarbonImmutable;
 use Carbon\Traits\Timestamp;
 use Database\Factories\UserModelFactory;

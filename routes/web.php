@@ -1,7 +1,8 @@
 <?php
 
+use Src\Application\Controller\User\GetUserController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
+Route::name('api.')->prefix('api')->group(function () {
+    Route::get('/users/{id}', GetUserController::class);
 });

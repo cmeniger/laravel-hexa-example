@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Domain\User\Enum\UserStatus;
-use App\Infrastructure\Models\UserModel;
+use Src\Domain\User\Enum\UserStatus;
+use Src\Infrastructure\Models\UserModel;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
