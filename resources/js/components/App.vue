@@ -10,6 +10,6 @@
 </template>
 
 <script setup>
-    import Logo from '@/components/Logo.vue';
-    import Nav from '@/components/Nav.vue';
+    import Logo from './Logo.vue';
+    import Nav from './Nav.vue';
 </script>

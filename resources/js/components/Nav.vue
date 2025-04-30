@@ -22,9 +22,9 @@
 </template>
 
 <script setup>
-  import { shallowRef } from 'vue'
+  import { shallowRef } from 'vue';
 
-  const tab = shallowRef('tab-1')
+  const tab = shallowRef('tab-1');
   const tabs = [
     {
       icon: '',
@@ -44,5 +44,5 @@
       value: 'tab-3',
       link: '/about',
     },
-  ]
+  ];
 </script>

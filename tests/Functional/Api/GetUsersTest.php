@@ -66,10 +66,10 @@ describe('success cases', function (): void {
         // items
         $this->assertCount($count, $response->json('items'));
         // meta
-        $this->assertEquals($page, $response->json('meta.current_page'));
-        $this->assertEquals($perPage, $response->json('meta.per_page'));
+        $this->assertEquals($page, $response->json('meta.currentPage'));
+        $this->assertEquals($perPage, $response->json('meta.perPage'));
+        $this->assertEquals($lastPage, $response->json('meta.lastPage'));
         $this->assertEquals($total, $response->json('meta.total'));
-        $this->assertEquals($lastPage, $response->json('meta.last_page'));
         // links
         $this->assertStringContainsString ('?page=1', $response->json('links.first'));
         $this->assertStringContainsString (sprintf('?page=%d', $lastPage), $response->json('links.last'));
