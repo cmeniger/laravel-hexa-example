@@ -16,6 +16,7 @@
                     flat
                     hide-details
                     single-line
+                    v-model="searchText"
                 ></v-text-field>
                 <v-btn icon="mdi-reload" @click="reload"></v-btn>
                 <v-menu>
@@ -82,6 +83,7 @@
     const perPage = [10, 20, 30, 100];
     const currentPage = ref(1);
     const lastPage = ref(1);
+    const searchText = ref('');
     const store = useUserStore();
 
     const users = computed(() => {
@@ -103,15 +105,29 @@
         }
     });
 
+    watch(searchText, (newSearch, oldSearch) => {
+        if(newSearch == '') {
+            reload();
+            return;
+        }
+        if(newSearch != oldSearch) {
+            search(newSearch);
+        }
+    });
+
     function reload() {
         store.fetchUsers(null, users.value.meta ? users.value.meta.perPage : null);
     };
 
     function changePerPage(perPage) {
-        store.fetchUsers(null, perPage);
+        store.fetchUsers(null, perPage, searchText.value);
     };
 
     function changePage(page) {
-        store.fetchUsers(page, users.value.meta.perPage);
+        store.fetchUsers(page, users.value.meta.perPage, searchText.value);
+    };
+
+    function search(search) {
+        store.fetchUsers(null, users.value.meta.perPage, search);
     };
 </script>

@@ -75,6 +75,20 @@ final class UserRepository implements UserRepositoryInterface
     private function createQueryFiltered(FilterUsersData $filters): Builder
     {
         $query = UserModel::query();
+
+        if ($filters->search) {
+            $query->where(function (Builder $query) use ($filters)
+            {   
+                $searchText = sprintf('%%%s%%', $filters->search);
+                $query->where("id","like",$searchText);
+                $query->orWhere("first_name","like",$searchText);
+                $query->orWhere("last_name","like",$searchText);
+                $query->orWhere("email","like",$searchText);
+                $query->orWhere("status","like",$searchText);
+            });
+
+            return $query;
+        }
         
         if ($filters->id) {
             $query->where("id", $filters->id);

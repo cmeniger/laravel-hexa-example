@@ -51,10 +51,10 @@ export const useUserStore = defineStore('user', {
     },
   },
   actions: {
-    async fetchUsers(page?: number, perPage?: number) {
+    async fetchUsers(page?: number, perPage?: number, search?: string) {
       this.isLoading = true;
       try {
-        const response = await axios.get('http://localhost:8000/api/users', {params: {page, perPage}});
+        const response = await axios.get('http://localhost:8000/api/users', {params: {page, perPage, search}});
         this.usersPaginated = {
           items: response.data.items,
           meta: response.data.meta,

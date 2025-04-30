@@ -14,6 +14,7 @@ final readonly class FilterUsersData
         public ?string $firstName = null,
         public ?string $lastName = null,
         public ?string $email = null,
+        public ?string $search = null,
         public ?UserStatus $status = null,
         public ?PaginatedAttributeData $pagination = null,
     )
@@ -31,6 +32,7 @@ final readonly class FilterUsersData
             firstName: $data["firstName"] ?? null,
             lastName: $data["lastName"] ?? null,
             email: $data["email"] ?? null,
+            search: $data["search"] ?? null,
             status: UserStatus::tryFrom($data["status"] ?? ''),
             pagination: PaginatedAttributeData::buildFromArray(data: $data),
         );

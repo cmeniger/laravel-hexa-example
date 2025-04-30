@@ -52,6 +52,7 @@ describe('success cases', function (): void {
         'by status'=> ['?status='.UserStatus::ACTIVATED->value, 3],
         'by unknown firstName'=> ['?firstName=Jim', 0],
         'by unknown filter'=> ['?test=Jim', 5],
+        'by search'=> ['?search=Doe', 2],
     ]);
 
     it('paginated', function (string $attributes, int $page, int $perPage, int $count, int $total, int $lastPage, ?string $linkPrev, ?string $linkNext): void {
