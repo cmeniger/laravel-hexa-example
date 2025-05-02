@@ -67,6 +67,18 @@ export const useUserStore = defineStore('user', {
       } finally {
         this.isLoading = false;
       }
+    },
+    async fetchUser(id: number) {
+      this.isLoading = true;
+      try {
+        const response = await axios.get('http://localhost:8000/api/users/' + id);
+        this.user = response.data;
+      } catch (error) {
+        this.error = error.message;
+        console.error(this.error);
+      } finally {
+        this.isLoading = false;
+      }
     }
   }
 })

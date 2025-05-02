@@ -10,6 +10,10 @@ Route::get('/users', function () {
     return view('app');
 });
 
+Route::get('/users/{id}', function () {
+    return view('app');
+});
+
 Route::get('/about', function () {
     return view('app');
 });

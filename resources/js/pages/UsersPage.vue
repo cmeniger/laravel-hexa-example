@@ -19,115 +19,56 @@
                     v-model="searchText"
                 ></v-text-field>
                 <v-btn icon="mdi-reload" @click="reload"></v-btn>
-                <v-menu>
-                    <template v-slot:activator="{ props }">
-                        <v-btn icon="mdi-eye" v-bind="props"></v-btn>
-                    </template>
-                    <v-list>
-                        <v-list-item
-                            v-for="(value, index) in perPage"
-                            :key="index"
-                            :value="index"
-                            :class="[users.meta.perPage == value ? 'bg-primary' : '', 'text-center']"
-                            @click="changePerPage(value)"
-                            >
-                            <v-list-item-title>{{ value }}</v-list-item-title>
-                        </v-list-item>
-                    </v-list>
-                </v-menu>
             </template>
         </v-toolbar>
     </v-card>
-    <v-table>
-        <thead>
-            <tr>
-                <th v-for="title in titles" :key="title" class="text-left">
-                    {{ title }}
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="item in users.items" :key="item.id">
-                <td>{{ item.id }}</td>
-                <td>{{ item.firstName }}</td>
-                <td>{{ item.lastName }}</td>
-                <td>{{ item.email }}</td>
-                <td>{{ item.status }}</td>
-                <td></td>
-            </tr>
-        </tbody>
-    </v-table>
-    <div class="text-center">
-        <v-container>
-        <v-row justify="center">
-            <v-col cols="8">
-            <v-container class="max-width">
-                <v-pagination
-                v-model="currentPage"
-                :length="lastPage"
-                class="my-4"
-                ></v-pagination>
-            </v-container>
-            </v-col>
-        </v-row>
-        </v-container>
-    </div>
+    <v-data-table-server
+        :items-per-page="null == users.meta ? 0 : users.meta.perPage"
+        :headers="tableHeaders"
+        :items="users.items"
+        :items-length="null == users.meta ? 0 : users.meta.total"
+        :loading="null == users.items"
+        :search="searchText"
+        item-value="id"
+        hover
+        @update:options="loadUsers"
+        @click:row="handleClick"
+    ></v-data-table-server>
 </template>
 
 <script setup>
-    import { onMounted, computed, watch, ref } from "vue";
+    import { computed, watch, ref } from "vue";
     import { useUserStore } from '../stores/userStore';
+    import { useRouter } from "vue-router";
 
-    const titles = ['ID', 'First name', 'Last name', 'Email', 'Status'];
-    const perPage = [10, 20, 30, 100];
-    const currentPage = ref(1);
-    const lastPage = ref(1);
-    const searchText = ref('');
+    const tableHeaders = ref([
+        { title: 'ID', key: 'id', align: 'start' },
+        { title: 'First name', key: 'firstName', align: 'start' },
+        { title: 'Last name', key: 'lastName', align: 'start' },
+        { title: 'Email', key: 'email', align: 'start' },
+        { title: 'Status', key: 'status', align: 'start' },
+    ]);
+    const searchText = ref(null);
     const store = useUserStore();
-
     const users = computed(() => {
-        if (store.usersPaginated.meta) {
-            currentPage.value = store.usersPaginated.meta.currentPage;
-            lastPage.value = store.usersPaginated.meta.lastPage;
-        }
-        
         return store.usersPaginated;
     });
+    const router = useRouter();
 
-    onMounted(() => {
-        reload();
+    watch(searchText, () => {
+        searchText.value = ('' == searchText.value ? null : searchText.value);
+        loadUsers({itemsPerPage: users.value.meta.perPage});
     });
 
-    watch(currentPage, (newPage, oldPage) => {
-        if(newPage != oldPage) {
-            changePage(newPage);
-        }
-    });
-
-    watch(searchText, (newSearch, oldSearch) => {
-        if(newSearch == '') {
-            reload();
-            return;
-        }
-        if(newSearch != oldSearch) {
-            search(newSearch);
-        }
-    });
+    function loadUsers({ page, itemsPerPage, sortBy }) {
+        store.fetchUsers(page, itemsPerPage, searchText.value);
+    };
 
     function reload() {
-        store.fetchUsers(null, users.value.meta ? users.value.meta.perPage : null);
+        loadUsers({itemsPerPage: users.value.meta.perPage});
     };
 
-    function changePerPage(perPage) {
-        store.fetchUsers(null, perPage, searchText.value);
-    };
-
-    function changePage(page) {
-        store.fetchUsers(page, users.value.meta.perPage, searchText.value);
-    };
-
-    function search(search) {
-        store.fetchUsers(null, users.value.meta.perPage, search);
-    };
+    function handleClick(event, row) {
+        router.push({ name: 'user', params: { id: row.item.id } });
+    }
 </script>
