@@ -1,4 +1,5 @@
 <template>
+    <BreadCrumbs />
     <v-card-title class="text-center justify-center py-6">
         <h1 class="font-weight-bold text-h2">
             Users
@@ -37,6 +38,7 @@
 </template>
 
 <script setup>
+    import BreadCrumbs from '../components/BreadCrumbs.vue';
     import { computed, watch, ref } from "vue";
     import { useUserStore } from '../stores/userStore';
     import { useRouter } from "vue-router";

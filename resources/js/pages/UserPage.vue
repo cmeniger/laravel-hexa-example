@@ -1,14 +1,17 @@
 <template>
-    <div class="text-center py-6">
-        <template v-if="null == user || route.params.id != user.id">
+    <template v-if="null == user || route.params.id != user.id">
+        <div class="text-center py-6">
             <v-progress-circular
             :size="125"
             :width="10"
             color="primary"
             indeterminate
             ></v-progress-circular>
-        </template>
-        <template v-else>
+        </div>
+    </template>
+    <template v-else>
+        <BreadCrumbs :param="user.firstName + ' ' + user.lastName" />
+        <div class="text-center py-6">
             <v-avatar color="primary" size="125" class="overflow-visible">
                 <span class="text-h2">{{ user.firstName[0].toUpperCase() }}{{ user.lastName[0].toUpperCase() }}</span>
                 <v-icon color="success" icon="mdi-check-circle" size="large" class="status-icon position-absolute border-lg rounded-circle"></v-icon>
@@ -20,11 +23,12 @@
                 <v-icon icon="mdi-email" size="x-small" class="mr-3"></v-icon>
                 <a href="mailto:{{ user.email }}" class="text-decoration-none">{{ user.email }}</a>
             </v-card-text>
-        </template>
-    </div>
+        </div>
+    </template>
 </template>
 
 <script setup>
+    import BreadCrumbs from '../components/BreadCrumbs.vue';
     import { computed, onMounted } from "vue";
     import { useRoute } from "vue-router";
     import { useUserStore } from '../stores/userStore';

@@ -1,4 +1,5 @@
 <template>
+    <BreadCrumbs />
     <v-card-title class="text-center justify-center py-6">
         <h1 class="font-weight-bold text-h2">
             Home
@@ -22,3 +23,7 @@
         </v-row>
     </v-container>
 </template>
+
+<script setup>
+    import BreadCrumbs from '../components/BreadCrumbs.vue';
+</script>
