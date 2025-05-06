@@ -20,7 +20,7 @@
             items.value.push({
                 title: item.text,
                 disabled: item.to ? false : true,
-                href: router.resolve({name: item.to}).href,
+                href: item.to ? router.resolve({name: item.to}).href : '',
             });
         });
     });
