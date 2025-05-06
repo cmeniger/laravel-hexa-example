@@ -7,24 +7,19 @@ namespace Src\Application\Controller\User;
 use Src\Application\Controller\User\Resource\UserResource;
 use Src\Domain\User\Action\FindUserAction;
 use Src\Domain\User\Data\FindUserData;
-use Src\Domain\User\Exception\UserNotFoundException;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
+use Src\Infrastructure\Outer\ApiOuter;
 
 final class GetUserController extends Controller
 {
     public function __construct(private FindUserAction $action)
-    {
-
+    {      
+        $action->setOuter(outer: new ApiOuter(ressourceClass: UserResource::class));
     }
 
     public function __invoke(int $id): JsonResponse|UserResource
     {
-        try {
-            return new UserResource(resource: ($this->action)(data: new FindUserData(id: $id)));
-        } catch (UserNotFoundException $exception) {
-            return new JsonResponse(data: ['error' => $exception->getMessage()], status: Response::HTTP_NOT_FOUND);
-        }
+        return ($this->action)(data: new FindUserData(id: $id))->getResponse();
     }
 }

@@ -10,6 +10,8 @@ class UserNotFoundException extends Exception
 {
     public function __construct()
     {
+        $this->code = 404;
+
         parent::__construct('User does not exist.');
     }
 }

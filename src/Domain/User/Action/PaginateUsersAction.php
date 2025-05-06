@@ -4,20 +4,22 @@ declare(strict_types=1);
 
 namespace Src\Domain\User\Action;
 
-use Src\Domain\Core\Data\PaginatedData;
+use Src\Domain\Core\Action\OuterInterface;
+use Src\Domain\Core\Action\OuterTrait;
 use Src\Domain\User\Data\FilterUsersData;
 use Src\Domain\User\Repository\UserRepositoryInterface;
 
-
-final readonly class PaginateUsersAction
+final class PaginateUsersAction
 {
+    use OuterTrait;
+
     public function __construct(private UserRepositoryInterface $userRepository)
     {
 
     }
 
-    public function __invoke(FilterUsersData $data): PaginatedData
+    public function __invoke(FilterUsersData $data): ?OuterInterface
     {
-        return $this->userRepository->findPaginated(filters: $data);
+        return $this->setData(data: $this->userRepository->findPaginated(filters: $data));
     }
 }
