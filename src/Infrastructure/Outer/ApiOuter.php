@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Src\Infrastructure\Outer;
 
+use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprFalseNode;
 use Src\Application\Resource\PaginatedResource;
 use Illuminate\Http\JsonResponse;
 
@@ -20,12 +21,17 @@ final class ApiOuter extends AbstractOuter
 
     }
 
+    public function hasError(): bool
+    {
+        return $this->exception ? true : false;
+    }
+
     /**
      * @return JsonResponse|T
      */
     public function getResponse(): mixed
     {
-        return $this->exception ? 
+        return $this->hasError() ? 
             new JsonResponse(data: ['error' => $this->exception->getMessage()], status: $this->exception->getCode()) :
             $this->getRessource()
         ;

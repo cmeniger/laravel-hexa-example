@@ -8,5 +8,6 @@ interface OuterInterface
 {
     public function setData(mixed $data): void;
     public function setException(\Exception $exception): void;
+    public function hasError(): bool;
     public function getResponse(): mixed;
 }

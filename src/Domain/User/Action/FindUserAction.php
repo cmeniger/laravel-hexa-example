@@ -10,6 +10,9 @@ use Src\Domain\User\Data\FindUserData;
 use Src\Domain\User\Exception\UserNotFoundException;
 use Src\Domain\User\Repository\UserRepositoryInterface;
 
+/**
+ * @template T
+ */
 final class FindUserAction
 {
     use OuterTrait;
@@ -19,6 +22,9 @@ final class FindUserAction
 
     }
 
+    /**
+     * @return T
+     */
     public function __invoke(FindUserData $data): ?OuterInterface
     {
         $user = $this->userRepository->findById(id: $data->id);

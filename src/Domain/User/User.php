@@ -52,4 +52,15 @@ final class User
     {
         return $this->status;
     }
+
+    public function __toArray(): array
+    {
+        return [
+            'id'=> $this->id,
+            'first_name'=> $this->firstName,
+            'last_name'=> $this->lastName,
+            'email'=> $this->email,
+            'status'=> $this->status->value,
+        ];
+    }
 }

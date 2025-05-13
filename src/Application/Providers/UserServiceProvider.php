@@ -3,6 +3,7 @@
 namespace Src\Application\Providers;
  
 use Illuminate\Support\ServiceProvider;
+use Src\Application\Command\User\GetUserCommand;
 use Src\Domain\User\Repository\UserRepositoryInterface;
 use Src\Infrastructure\Repository\UserRepository;
  
@@ -24,6 +25,11 @@ class UserServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-
+        /**
+         * Commands
+         */
+        $this->commands([
+            GetUserCommand::class,
+        ]);
     }
 }
