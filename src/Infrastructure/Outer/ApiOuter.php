@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Src\Infrastructure\Outer;
 
-use Src\Application\Controller\User\Resource\UserResource;
 use Src\Application\Resource\PaginatedResource;
 use Illuminate\Http\JsonResponse;
 
@@ -16,7 +15,7 @@ final class ApiOuter extends AbstractOuter
     /**
      * @param class-string<T> $ressourceClass
      */
-    public function __construct(private string $ressourceClass)
+    public function __construct(private string $ressourceClass, private ?string $paginatedItemsResourceClass = null)
     {
 
     }
@@ -41,7 +40,7 @@ final class ApiOuter extends AbstractOuter
         if (PaginatedResource::class === $this->ressourceClass) {
             return new $this->ressourceClass(
                 resource: $this->data,
-                items: UserResource::collection(resource: $this->data->items),
+                items: (new $this->paginatedItemsResourceClass(null))::collection(resource: $this->data->items),
             );
         }
 

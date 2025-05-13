@@ -7,9 +7,9 @@ namespace Src\Application\Controller\User;
 use Src\Application\Controller\User\Resource\UserResource;
 use Src\Domain\User\Action\FindUserAction;
 use Src\Domain\User\Data\FindUserData;
+use Src\Infrastructure\Outer\ApiOuter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
-use Src\Infrastructure\Outer\ApiOuter;
 
 final class GetUserController extends Controller
 {
